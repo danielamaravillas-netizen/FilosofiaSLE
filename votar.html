@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta SLE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 28px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #378ADD;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 0 0 28px;
+        }
+
+        .question {
+            margin-bottom: 32px;
+        }
+
+        .q-number {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #378ADD;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .q-text {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 14px 10px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #333;
+        }
+
+        .option-btn:hover {
+            border-color: #378ADD;
+            background: #f0f7ff;
+            color: #378ADD;
+        }
+
+        .option-btn.selected-si {
+            border-color: #378ADD;
+            background: #378ADD;
+            color: white;
+        }
+
+        .option-btn.selected-no {
+            border-color: #E24B4A;
+            background: #E24B4A;
+            color: white;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #378ADD;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover { background: #2970c0; }
+        .submit-btn:disabled { background: #ccc; cursor: default; }
+
+        .success {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .success-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+
+        .success-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .success-sub {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+
+        .dot-step {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            transition: background 0.3s;
+        }
+
+        .dot-step.done { background: #378ADD; }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 11px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo">
+        <div class="logo-text">SLE</div>
+        <div class="logo-sub">Soporte Logístico Express</div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- Progreso -->
+    <div class="progress">
+        <div class="dot-step done" id="dot1"></div>
+        <div class="dot-step" id="dot2"></div>
+    </div>
+
+    <!-- Formulario -->
+    <div id="form-section">
+
+        <!-- Pregunta 1 -->
+        <div class="question" id="q1-block">
+            <div class="q-number">Pregunta 1 de 2</div>
+            <div class="q-text">¿Conoces la misión de la compañía?</div>
+            <div class="options">
+                <button class="option-btn" id="q1-si" onclick="select(1,'si')">✅ Sí</button>
+                <button class="option-btn" id="q1-no" onclick="select(1,'no')">❌ No</button>
+            </div>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="question" id="q2-block" style="display:none;">
+            <div class="q-number">Pregunta 2 de 2</div>
+            <div class="q-text">¿Cuentas con el fondo de pantalla institucional en tu equipo de cómputo?</div>
+            <div class="options">
+                <button class="option-btn" id="q2-si" onclick="select(2,'si')">✅ Sí</button>
+                <button class="option-btn" id="q2-no" onclick="select(2,'no')">❌ No</button>
+            </div>
+        </div>
+
+        <button class="submit-btn" id="next-btn" onclick="next()" disabled>Siguiente →</button>
+    </div>
+
+    <!-- Pantalla de éxito -->
+    <div class="success" id="success-section">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">¡Gracias!</div>
+        <div class="success-sub">Tu respuesta fue registrada.<br>Puedes ver los resultados en la pantalla del presentador.</div>
+    </div>
+
+    <div class="footer">Encuesta anónima · SLE 2026</div>
+</div>
+
+<script>
+    const answers = { q1: null, q2: null };
+    let currentQ = 1;
+
+    function select(q, val) {
+        answers['q' + q] = val;
+
+        // Limpiar selección previa
+        document.getElementById('q' + q + '-si').className = 'option-btn';
+        document.getElementById('q' + q + '-no').className = 'option-btn';
+
+        // Marcar selección
+        document.getElementById('q' + q + '-' + val).className = 'option-btn selected-' + val;
+
+        document.getElementById('next-btn').disabled = false;
+    }
+
+    function next() {
+        if (currentQ === 1) {
+            // Pasar a pregunta 2
+            document.getElementById('q1-block').style.display = 'none';
+            document.getElementById('q2-block').style.display = 'block';
+            document.getElementById('dot2').classList.add('done');
+            document.getElementById('next-btn').textContent = 'Enviar respuestas ✓';
+            document.getElementById('next-btn').disabled = true;
+            currentQ = 2;
+        } else {
+            // Enviar
+            submit();
+        }
+    }
+
+    function submit() {
+        // Guardar en localStorage para que el presentador pueda leer
+        const existing = JSON.parse(localStorage.getItem('sle_encuesta') || '{"q1":{"si":0,"no":0},"q2":{"si":0,"no":0}}');
+        existing.q1[answers.q1]++;
+        existing.q2[answers.q2]++;
+        localStorage.setItem('sle_encuesta', JSON.stringify(existing));
+
+        // Mostrar éxito
+        document.getElementById('form-section').style.display = 'none';
+        document.getElementById('success-section').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
