@@ -19,7 +19,7 @@
         .opt-btn:hover { border-color: #378ADD; color: #378ADD; background: #f0f7ff; }
         .opt-btn.sel-a { border-color: #378ADD; background: #378ADD; color: white; }
         .opt-btn.sel-b { border-color: #7B61FF; background: #7B61FF; color: white; }
-        .opt-btn.sel-c { border-color: #E24B4A; background: #E24B4A; color: white; }
+        .opt-btn.sel-c { border-color: #00b894; background: #00b894; color: white; }
         .send-btn { width: 100%; padding: 15px; background: #378ADD; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .send-btn:hover { background: #2970c0; }
         .send-btn:disabled { background: #d0d0d0; cursor: default; }
@@ -40,16 +40,16 @@
 
     <div id="form-section">
         <div class="q-number">Pregunta 1 de 1</div>
-        <div class="q-text">¿Cuál es la visión correcta de SLE?</div>
+        <div class="q-text">¿Cuáles son los valores de SLE?</div>
         <div class="options">
             <button class="opt-btn" id="opt-a" onclick="elegir('a')">
-                <strong>A)</strong> Consolidarnos como una empresa mexicana líder en el sector logístico a nivel nacional.
+                <strong>A)</strong> Seguridad, Rapidez y Eficacia
             </button>
             <button class="opt-btn" id="opt-b" onclick="elegir('b')">
-                <strong>B)</strong> Consolidarnos como una empresa líder en el sector logístico y de transporte.
+                <strong>B)</strong> Flexibilidad, Seguridad y Rentabilidad
             </button>
             <button class="opt-btn" id="opt-c" onclick="elegir('c')">
-                <strong>C)</strong> Consolidarnos como una empresa líder en el sector logístico, transporte y almacén.
+                <strong>C)</strong> Seguridad, Rapidez y Flexibilidad
             </button>
         </div>
         <button class="send-btn" id="send-btn" onclick="enviar()" disabled>Enviar respuesta ✓</button>
@@ -96,20 +96,17 @@
         document.getElementById('send-btn').disabled = true;
         document.getElementById('send-btn').textContent = 'Enviando...';
         try {
-            // Sumar al total en vivo
             await runTransaction(ref(db, 'votos/q1/' + seleccion), (v) => (v || 0) + 1);
-
-            // Guardar respuesta individual
             await push(ref(db, 'respuestas'), {
-                vision: seleccion,
+                valores: seleccion,
                 opcion_texto: {
-                    a: 'Consolidarnos como una empresa mexicana líder en el sector logístico a nivel nacional.',
-                    b: 'Consolidarnos como una empresa líder en el sector logístico y de transporte.',
-                    c: 'Consolidarnos como una empresa líder en el sector logístico, transporte y almacén.'
+                    a: 'Seguridad, Rapidez y Eficacia',
+                    b: 'Flexibilidad, Seguridad y Rentabilidad',
+                    c: 'Seguridad, Rapidez y Flexibilidad'
                 }[seleccion],
+                correcta: seleccion === 'c',
                 fecha: new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })
             });
-
             document.getElementById('form-section').style.display = 'none';
             document.getElementById('success-section').style.display = 'block';
         } catch(e) {
