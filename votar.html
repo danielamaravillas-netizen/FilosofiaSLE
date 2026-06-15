@@ -13,20 +13,25 @@
         .logo-sub { font-size: 12px; color: #aaa; margin-top: 2px; }
         .divider { height: 1px; background: #f0f0f0; margin-bottom: 24px; }
         .q-number { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #378ADD; margin-bottom: 8px; }
-        .q-text { font-size: 18px; font-weight: 600; color: #1a1a1a; line-height: 1.4; margin-bottom: 24px; }
+        .q-text { font-size: 17px; font-weight: 600; color: #1a1a1a; line-height: 1.4; margin-bottom: 24px; }
         .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
-        .opt-btn { padding: 16px 18px; border-radius: 12px; border: 2px solid #e0e0e0; background: white; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: #333; text-align: left; line-height: 1.4; }
+        .opt-btn { padding: 16px 18px; border-radius: 12px; border: 2px solid #e0e0e0; background: white; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: #333; text-align: left; line-height: 1.5; }
         .opt-btn:hover { border-color: #378ADD; color: #378ADD; background: #f0f7ff; }
         .opt-btn.sel-a { border-color: #378ADD; background: #378ADD; color: white; }
         .opt-btn.sel-b { border-color: #7B61FF; background: #7B61FF; color: white; }
-        .opt-btn.sel-c { border-color: #00b894; background: #00b894; color: white; }
+        .opt-btn.sel-c { border-color: #E24B4A; background: #E24B4A; color: white; }
         .send-btn { width: 100%; padding: 15px; background: #378ADD; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .send-btn:hover { background: #2970c0; }
         .send-btn:disabled { background: #d0d0d0; cursor: default; }
+
+        /* Pantallas de resultado */
         .success { display: none; text-align: center; padding: 16px 0; }
         .success-icon { font-size: 64px; margin-bottom: 16px; }
-        .success-title { font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+        .success-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
         .success-sub { font-size: 14px; color: #888; line-height: 1.5; }
+        .success.correcto .success-title { color: #2e7d32; }
+        .success.incorrecto .success-title { color: #c62828; }
+
         .footer { text-align: center; margin-top: 24px; font-size: 11px; color: #ccc; }
     </style>
 </head>
@@ -40,25 +45,33 @@
 
     <div id="form-section">
         <div class="q-number">Pregunta 1 de 1</div>
-        <div class="q-text">¿Cuáles son los valores de SLE?</div>
+        <div class="q-text">¿Cuál es el objetivo de tu proceso?</div>
         <div class="options">
             <button class="opt-btn" id="opt-a" onclick="elegir('a')">
-                <strong>A)</strong> Seguridad, Rapidez y Eficacia
+                <strong>A)</strong> Garantizar la ejecución eficiente y coordinada de actividades, cumpliendo con los estándares establecidos por cliente.
             </button>
             <button class="opt-btn" id="opt-b" onclick="elegir('b')">
-                <strong>B)</strong> Flexibilidad, Seguridad y Rentabilidad
+                <strong>B)</strong> Enlace operativo entre el cliente y las áreas internas, asegurando la comunicación asertiva entre ambas partes para la correcta ejecución del servicio conforme a lo pactado.
             </button>
             <button class="opt-btn" id="opt-c" onclick="elegir('c')">
-                <strong>C)</strong> Seguridad, Rapidez y Flexibilidad
+                <strong>C)</strong> Optimizar procesos operativos y administrativos a través de proyectos innovadores, garantizando eficiencia y sostenibilidad, mientras se asegura la satisfacción del cliente mediante la mejora continua, el cumplimiento normativo y la excelencia en la calidad del servicio.
             </button>
         </div>
         <button class="send-btn" id="send-btn" onclick="enviar()" disabled>Enviar respuesta ✓</button>
     </div>
 
-    <div class="success" id="success-section">
-        <div class="success-icon">🎉</div>
-        <div class="success-title">¡Gracias por participar!</div>
-        <div class="success-sub">Tu respuesta quedó registrada.<br>Puedes ver los resultados en la pantalla principal.</div>
+    <!-- Respuesta correcta -->
+    <div class="success correcto" id="success-correcto">
+        <div class="success-icon">✅</div>
+        <div class="success-title">¡Felicidades!</div>
+        <div class="success-sub">Gracias por tu participación,<br><strong>tu respuesta es correcta.</strong></div>
+    </div>
+
+    <!-- Respuesta incorrecta -->
+    <div class="success incorrecto" id="success-incorrecto">
+        <div class="success-icon">❌</div>
+        <div class="success-title">¡Gracias!</div>
+        <div class="success-sub">Gracias por tu participación,<br><strong>tu respuesta es incorrecta.</strong></div>
     </div>
 
     <div class="footer">Encuesta anónima · SLE 2026</div>
@@ -77,6 +90,8 @@
         messagingSenderId: "276179568423",
         appId: "1:276179568423:web:698934055d0306aaddcb02"
     };
+
+    const CORRECTA = 'a';
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
@@ -98,17 +113,18 @@
         try {
             await runTransaction(ref(db, 'votos/q1/' + seleccion), (v) => (v || 0) + 1);
             await push(ref(db, 'respuestas'), {
-                valores: seleccion,
-                opcion_texto: {
-                    a: 'Seguridad, Rapidez y Eficacia',
-                    b: 'Flexibilidad, Seguridad y Rentabilidad',
-                    c: 'Seguridad, Rapidez y Flexibilidad'
-                }[seleccion],
-                correcta: seleccion === 'c',
+                objetivo_proceso: seleccion,
+                correcta: seleccion === CORRECTA,
                 fecha: new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })
             });
+
             document.getElementById('form-section').style.display = 'none';
-            document.getElementById('success-section').style.display = 'block';
+
+            if (seleccion === CORRECTA) {
+                document.getElementById('success-correcto').style.display = 'block';
+            } else {
+                document.getElementById('success-incorrecto').style.display = 'block';
+            }
         } catch(e) {
             document.getElementById('send-btn').disabled = false;
             document.getElementById('send-btn').textContent = 'Reintentar';

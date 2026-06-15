@@ -12,15 +12,14 @@
         .right { position: sticky; top: 24px; }
         .question-block { background: white; border-radius: 14px; padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid #ebebeb; }
         .q-title { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 24px; line-height: 1.3; }
-        .result-item { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-        .result-label { font-size: 13px; font-weight: 500; color: #333; min-width: 220px; max-width: 220px; line-height: 1.3; }
-        .result-bar { flex: 1; height: 38px; background: #f0f0f0; border-radius: 8px; overflow: hidden; }
+        .result-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+        .result-label { font-size: 13px; font-weight: 500; color: #333; min-width: 260px; max-width: 260px; line-height: 1.4; }
+        .result-bar { flex: 1; height: 38px; background: #f0f0f0; border-radius: 8px; overflow: hidden; margin-top: 2px; }
         .result-fill { height: 100%; border-radius: 8px; display: flex; align-items: center; padding-left: 12px; font-size: 13px; font-weight: 700; color: white; transition: width 0.5s ease; min-width: 52px; }
         .fill-a { background: #378ADD; }
         .fill-b { background: #7B61FF; }
-        .fill-c { background: #00b894; }
-        .result-count { font-size: 16px; font-weight: 700; color: #1a1a1a; min-width: 32px; text-align: right; }
-        .correct-badge { display: inline-block; font-size: 10px; font-weight: 700; background: #e8f5e9; color: #2e7d32; padding: 2px 7px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+        .fill-c { background: #E24B4A; }
+        .result-count { font-size: 16px; font-weight: 700; color: #1a1a1a; min-width: 32px; text-align: right; margin-top: 8px; }
         .info-box { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid #ebebeb; text-align: center; }
         .participants-num { font-size: 48px; font-weight: 700; color: #1a1a1a; }
         .participants-lbl { font-size: 13px; color: #aaa; margin-bottom: 16px; }
@@ -40,19 +39,19 @@
 <div class="container">
     <div class="left">
         <div class="question-block">
-            <div class="q-title">¿Cuáles son los valores de SLE?</div>
+            <div class="q-title">¿Cuál es el objetivo de tu proceso?</div>
             <div class="result-item">
-                <div class="result-label">A) Seguridad, Rapidez y Eficacia</div>
+                <div class="result-label"><strong>A)</strong> Garantizar la ejecución eficiente y coordinada de actividades, cumpliendo con los estándares establecidos por cliente.</div>
                 <div class="result-bar"><div class="result-fill fill-a" id="q1-a-fill" style="width:0%"><span id="q1-a-pct">0%</span></div></div>
                 <div class="result-count" id="q1-a-count">0</div>
             </div>
             <div class="result-item">
-                <div class="result-label">B) Flexibilidad, Seguridad y Rentabilidad</div>
+                <div class="result-label"><strong>B)</strong> Enlace operativo entre el cliente y las áreas internas, asegurando la comunicación asertiva entre ambas partes para la correcta ejecución del servicio conforme a lo pactado.</div>
                 <div class="result-bar"><div class="result-fill fill-b" id="q1-b-fill" style="width:0%"><span id="q1-b-pct">0%</span></div></div>
                 <div class="result-count" id="q1-b-count">0</div>
             </div>
             <div class="result-item">
-                <div class="result-label">C) Seguridad, Rapidez y Flexibilidad <span class="correct-badge">✓ Correcta</span></div>
+                <div class="result-label"><strong>C)</strong> Optimizar procesos operativos y administrativos a través de proyectos innovadores, garantizando eficiencia y sostenibilidad, mientras se asegura la satisfacción del cliente mediante la mejora continua, el cumplimiento normativo y la excelencia en la calidad del servicio.</div>
                 <div class="result-bar"><div class="result-fill fill-c" id="q1-c-fill" style="width:0%"><span id="q1-c-pct">0%</span></div></div>
                 <div class="result-count" id="q1-c-count">0</div>
             </div>
